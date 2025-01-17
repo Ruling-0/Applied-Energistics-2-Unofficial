@@ -10,8 +10,12 @@
 
 package appeng.util.inv;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.storage.data.IAEItemStack;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -215,6 +219,30 @@ public class AdaptorIInventory extends InventoryAdaptor {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean containsPatternInputs(ICraftingPatternDetails patternDetails) {
+        boolean hasPatternInputs = false;
+        final int s = this.i.getSizeInventory();
+        List<IAEItemStack> patternInputs = Arrays.asList(patternDetails.getCondensedInputs());
+        Iterator<IAEItemStack> patternInputIterator = patternInputs.iterator();
+        for (int x = 0; x < s; x++) {
+            ItemStack stack = this.i.getStackInSlot(x);
+            if (stack != null) {
+                hasPatternInputs = false;
+                while (patternInputIterator.hasNext()) {
+                    IAEItemStack patternInput = patternInputIterator.next();
+                    if (patternInput.isSameType(stack)) {
+                        hasPatternInputs = true;
+                        patternInputIterator.remove();
+                        break;
+                    }
+                }
+                patternInputIterator = patternInputs.iterator();
+            }
+        }
+        return hasPatternInputs;
     }
 
     /**

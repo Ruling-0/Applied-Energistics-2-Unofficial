@@ -932,7 +932,7 @@ public class DualityInterface implements IGridTickable, IStorageMonitorable, IIn
 
             final InventoryAdaptor ad = InventoryAdaptor.getAdaptor(te, s.getOpposite());
             if (ad != null) {
-                if (this.isBlocking() && !(this.isSmartBlocking() && this.lastInputHash == patternDetails.hashCode())
+                if (this.isBlocking() && !(this.isSmartBlocking() && this.lastInputHash == patternDetails.hashCode() && ad.containsPatternInputs(patternDetails))
                         && ad.containsItems()
                         && !inventoryCountsAsEmpty(te, ad, s.getOpposite()))
                     continue;

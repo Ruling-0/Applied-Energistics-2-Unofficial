@@ -10,8 +10,12 @@
 
 package appeng.integration.modules.helpers;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.storage.data.IAEItemStack;
 import net.mcft.copy.betterstorage.api.crate.ICrateStorage;
 import net.minecraft.item.ItemStack;
 
@@ -161,6 +165,28 @@ public class BSCrateStorageAdaptor extends InventoryAdaptor {
     @Override
     public boolean containsItems() {
         return this.cs.getUniqueItems() > 0;
+    }
+
+    @Override
+    public boolean containsPatternInputs(ICraftingPatternDetails patternDetails) {
+        boolean hasPatternInputs = false;
+        List<IAEItemStack> patternInputs = Arrays.asList(patternDetails.getCondensedInputs());
+        Iterator<IAEItemStack> patternInputIterator = patternInputs.iterator();
+        for (final ItemStack is : this.cs.getContents()) {
+            if (is != null) {
+                hasPatternInputs = false;
+                while (patternInputIterator.hasNext()) {
+                    IAEItemStack patternInput = patternInputIterator.next();
+                    if (patternInput.isSameType(is)) {
+                        hasPatternInputs = true;
+                        patternInputIterator.remove();
+                        break;
+                    }
+                }
+                patternInputIterator = patternInputs.iterator();
+            }
+        }
+        return hasPatternInputs;
     }
 
     @Override

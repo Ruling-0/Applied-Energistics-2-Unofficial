@@ -12,6 +12,7 @@ package appeng.util;
 
 import java.util.ArrayList;
 
+import appeng.api.networking.crafting.ICraftingPatternDetails;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -134,4 +135,6 @@ public abstract class InventoryAdaptor implements Iterable<ItemSlot> {
     }
 
     public abstract boolean containsItems();
+
+    public boolean containsPatternInputs(ICraftingPatternDetails patternDetails) { return true; };
 }

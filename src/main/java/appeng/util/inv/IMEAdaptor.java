@@ -10,8 +10,11 @@
 
 package appeng.util.inv;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+import appeng.api.networking.crafting.ICraftingPatternDetails;
 import net.minecraft.item.ItemStack;
 
 import com.google.common.collect.ImmutableList;
@@ -152,6 +155,30 @@ public class IMEAdaptor extends InventoryAdaptor {
     @Override
     public boolean containsItems() {
         return !this.getList().isEmpty();
+    }
+
+    @Override
+    public boolean containsPatternInputs(ICraftingPatternDetails patternDetails) {
+        if (this.getList().isEmpty()) return true;
+        boolean hasPatternInputs = false;
+        List<IAEItemStack> patternInputs = Arrays.asList(patternDetails.getCondensedInputs());
+        Iterator<IAEItemStack> patternInputIterator = patternInputs.iterator();
+        IItemList<IAEItemStack> itemList = this.getList();
+        for (IAEItemStack stack : itemList) {
+            if (stack != null) {
+                hasPatternInputs = false;
+                while (patternInputIterator.hasNext()) {
+                    IAEItemStack patternInput = patternInputIterator.next();
+                    if (patternInput.isSameType(stack)) {
+                        hasPatternInputs = true;
+                        patternInputIterator.remove();
+                        break;
+                    }
+                }
+                patternInputIterator = patternInputs.iterator();
+            }
+        }
+        return hasPatternInputs;
     }
 
     int getMaxSlots() {
