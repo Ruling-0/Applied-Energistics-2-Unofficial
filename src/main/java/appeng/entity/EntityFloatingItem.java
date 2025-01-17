@@ -25,6 +25,7 @@ public final class EntityFloatingItem extends EntityItem {
     public EntityFloatingItem(final Entity parent, final World world, final double x, final double y, final double z,
             final ItemStack stack) {
         super(world, x, y, z, stack);
+        this.delayBeforeCanPickup = -100;
         this.motionX = this.motionY = this.motionZ = 0.0d;
         this.hoverStart = 0.5f;
         this.rotationYaw = 0;
